@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+    - uses: einaregilsson/build-number@v1 
+      id: build_number
+      with:
+        token: ${{secrets.github_token}}  
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag starlabio/test-docker-image:${{steps.build_number.outputs.build_number}}
